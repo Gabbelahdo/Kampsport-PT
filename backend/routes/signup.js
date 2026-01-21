@@ -1,13 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
+require('dotenv').config();
 
-router.post('/', async (req, res) => {
-const {name, lastname, pnr, experience, goal, phone, email } = req.body;
-
-if(!name || !personnummer || !email){
-    return res.status(400).json({message: 'Fält saknas'});
-}
 
 let mail = nodemailer.createTransport({
     service: 'gmail',
@@ -17,14 +12,24 @@ let mail = nodemailer.createTransport({
     }
 });
 
+
+
+router.post('/', async (req, res) => {
+const {name, lastname, pnr, experience, goal, phone, email } = req.body;
+
+if(!name || !pnr || !email){
+    return res.status(400).json({message: 'Fält saknas'});
+}
+
+
 const mailOptions = {
     from: process.env.EMAIL_USER,
     to: process.env.EMAIL_USER,
     subject: 'PT anmälan',
     text: `
 Namn: ${name}
-Efternamn: ${efternamn}
-Personnummer: ${personnummer}
+Efternamn: ${lastname}
+Personnummer: ${pnr}
 Erfarenhet: ${experience}
 Mål: ${goal}
 Telefon: ${phone}
