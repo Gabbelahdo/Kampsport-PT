@@ -11,7 +11,7 @@ export default function Navbar(){
 
     return (
     
-        <nav style={{ padding: '10px', borderBottom: '1px solid £ccc'}}>
+        <nav>
         <Link to="/">Artiklar</Link> |{' '}
         <Link to="/signup">Anmälan</Link> |{' '}
 

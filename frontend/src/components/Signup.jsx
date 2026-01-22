@@ -8,10 +8,10 @@ export default function Signup(){
     });
     const [message, setMessage] = useState('');
 
-    const handleChange = e=> setForm({ ...form, [e.target.namn]: e.target.value});
+    const handleChange = e=> setForm({ ...form, [e.target.name]: e.target.value});
 
     const handleSubmit = async e => {
-        e.preventDefaut();
+        e.preventDefault();
         try{
         const res = await api.post('/signup', form);
         setMessage(res.data.message);

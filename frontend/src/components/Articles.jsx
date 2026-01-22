@@ -15,7 +15,7 @@ export default function Articles(){
          <div>
             <h2>Artiklar</h2>
             {articles.map(a => (
-            <div key={a.id} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '5px' }}>
+            <div key={a.id} className="article">
 
              <h3>{a.title}</h3>
              <p>{a.content}</p>   
