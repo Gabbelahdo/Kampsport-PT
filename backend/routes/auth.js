@@ -12,7 +12,11 @@ console.log("AUTH ROUTES LOADED");
 
 router.post('/register', async(req, res) => {
 console.log("REGISTER HIT", req.body);    
-const {username, password} = req.body;
+const {username, password, passwordConfirm} = req.body;
+if(passwordConfirm && password !== passwordConfirm){
+return res.status(400).json({ message: 'Lösenorden matchar inte' });
+}
+
 if (!username || !password) return res.status(400).json({ message: 'Saknar användarnamn eller lösenord' });
 
 const [existing] = await db.execute(

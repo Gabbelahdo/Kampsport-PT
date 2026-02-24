@@ -12,13 +12,20 @@ export default function Navbar(){
     return (
     
         <nav>
-        <Link to="/">Artiklar</Link> |{' '}
-        <Link to="/signup">Anmälan</Link> |{' '}
-
+        <Link to="/">Hem</Link> |{' '}
          {token ? (
-        <button onClick={handleLogout}>Logout</button>
+          <>
+          <Link to="/articles">Artiklar</Link> |{' '}
+          <Link to="/signup">Anmälan</Link> |{' '}
+          <button onClick={handleLogout}>Logout</button>
+
+          </>
       ) : (
+        <>
         <Link to="/login">Login</Link>
+        <Link to="/register">Registrera</Link>
+        </>
+        
       )}
       
         </nav>

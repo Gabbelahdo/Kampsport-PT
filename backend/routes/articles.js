@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
+const SECRET = process.env.JWT_SECRET || 'supersecret';
 
 const articles = [
     { id: 1, title: 'Träningsprogram för nybörjare', content: 'Tips och övningar...' },
@@ -8,10 +10,25 @@ const articles = [
     { id: 4, title: 'Mental träning', content: 'Fokus och motivation...' },
 ];
 
-router.get('/', (req, res) => {
+// Middleware to verify JWT token
+const verifyToken = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(' ')[1];
 
+    if (!token) {
+        return res.status(401).json({ message: 'Token saknas' });
+    }
+
+    try {
+        jwt.verify(token, SECRET);
+        next();
+    } catch (err) {
+        return res.status(403).json({ message: 'Ogiltig token' });
+    }
+};
+
+router.get('/', verifyToken, (req, res) => {
     res.json(articles);
-
 });
 
 module.exports = router;

@@ -12,37 +12,54 @@ let mail = nodemailer.createTransport({
     }
 });
 
+// verify transporter at startup to catch auth/connect issues early
+mail.verify((err, success) => {
+    if (err) console.error('Mail transporter error', err);
+    else console.log('Mail transporter ready');
+});
+
 
 
 router.post('/', async (req, res) => {
-const {name, lastname, pnr, experience, goal, phone, email } = req.body;
+const {
+  name, namn, lastname, efternamn,
+  pnr, personnummer, experience, goal, phone, email
+} = req.body;
 
-if(!name || !pnr || !email){
-    return res.status(400).json({message: 'Fält saknas'});
+const applicantName = name || namn || '';
+const applicantLastname = lastname || efternamn || '';
+const applicantPnr = pnr || personnummer || '';
+const applicantEmail = email || '';
+const applicantExperience = experience || '';
+const applicantGoal = goal || '';
+const applicantPhone = phone || '';
+
+if (!applicantName || !applicantPnr || !applicantEmail) {
+  console.log('Signup payload:', req.body); 
+  return res.status(400).json({ message: 'Fält saknas' });
 }
 
-
-const mailOptions = {
+try {
+  const mailOptions = {
     from: process.env.EMAIL_USER,
     to: process.env.EMAIL_USER,
     subject: 'PT anmälan',
     text: `
-Namn: ${name}
-Efternamn: ${lastname}
-Personnummer: ${pnr}
-Erfarenhet: ${experience}
-Mål: ${goal}
-Telefon: ${phone}
-E-post: ${email}
+Namn: ${applicantName}
+Efternamn: ${applicantLastname}
+Personnummer: ${applicantPnr}
+Erfarenhet: ${applicantExperience}
+Mål: ${applicantGoal}
+Telefon: ${applicantPhone}
+E-post: ${applicantEmail}
 `
-};
+  };
 
-try{
-await mail.sendMail(mailOptions);
-res.json({message: 'Anmälan skickad!'});
-} catch (error){
-console.error(error);
-res.status(500).json({message: 'Kunde inte skicka mail'});
+  await mail.sendMail(mailOptions);
+  res.json({ message: 'Anmälan skickad!' });
+} catch (error) {
+  console.error(error);
+  res.status(500).json({ message: 'Kunde inte skicka mail', error: error.message });
 }
 
 });

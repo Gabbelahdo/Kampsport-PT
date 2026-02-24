@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import api from '../api/api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function Login(){
   const [username, setUsername] = useState('');
@@ -33,6 +33,7 @@ export default function Login(){
     <button type="submit">Logga in</button>
     </form>
     <p>{message}</p>
+    <p>Har du inget konto? <Link to="/register">Registrera dig här</Link></p>
     </div>
  );
 
